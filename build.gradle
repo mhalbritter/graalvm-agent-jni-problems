@@ -1,0 +1,33 @@
+plugins {
+    id 'application'
+    id 'org.graalvm.buildtools.native' version '0.9.13'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+        vendor = JvmVendorSpec.GRAAL_VM
+    }
+}
+
+application {
+    mainClass = 'test.Main'
+}
+
+dependencies {
+    implementation 'net.java.dev.jna:jna:5.8.0'
+}
+
+graalvmNative {
+    agent {
+        metadataCopy {
+            mergeWithExisting = true
+            inputTaskNames.add("run")
+            outputDirectories.add("src/main/resources/META-INF/native-image/")
+        }
+    }
+}
